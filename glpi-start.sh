@@ -33,6 +33,22 @@ else
 	chown -R www-data:www-data ${FOLDER_WEB}${FOLDER_GLPI}
 fi
 
+
+#Install custom plugins
+# Telegram bot
+wget https://github.com/pluginsGLPI/telegrambot/releases/download/2.0.0/glpi-telegrambot-2.0.0.tar.bz2
+tar -jxf glpi-telegrambot-2.0.0.tar.bz2 && mv telegrambot/ /var/www/html/glpi/plugins/
+
+# Single Sign on
+wget https://github.com/edgardmessias/glpi-singlesignon/releases/download/v1.3.1/singlesignon.tgz
+tar -zxf singlesignon.tgz && mv singlesignon/ /var/www/html/glpi/plugins/
+
+# Reports plugin
+wget https://github.com/yllen/reports/releases/download/v1.14.1/glpi-plugin-reports-1.14.1.tar.gz
+tar -zxf glpi-plugin-reports-1.14.1.tar.gz && mv reports/ /var/www/html/glpi/plugins/
+
+chown -R www-data:www-data /var/www/html/glpi/plugins/*
+
 #Modification du vhost par défaut
 echo -e "<VirtualHost *:80>\n\tDocumentRoot /var/www/html/glpi\n\n\t<Directory /var/www/html/glpi>\n\t\tAllowOverride All\n\t\tOrder Allow,Deny\n\t\tAllow from all\n\t</Directory>\n\n\tErrorLog /var/log/apache2/error-glpi.log\n\tLogLevel warn\n\tCustomLog /var/log/apache2/access-glpi.log combined\n</VirtualHost>" > /etc/apache2/sites-available/000-default.conf
 
